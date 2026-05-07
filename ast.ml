@@ -7,3 +7,4 @@ type expr =
   | LBrace
   | RBrace
   | Dollars
+  | Environment of string * string option * expr list
