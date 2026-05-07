@@ -4,7 +4,9 @@
 
 %token <string> TEXT
 %token <string> COMMAND
-%token LBRACE RBRACE DOLLARS
+%token LBRACE RBRACE LBRACKET RBRACKET
+%token DOLLARS
+%token BEGIN END
 %token CITE
 %token EOF
 
@@ -21,4 +23,10 @@ expr:
   | DOLLARS     { Ast.Dollars }
   | LBRACE      { Ast.LBrace }
   | RBRACE      { Ast.RBrace }
+  | LBRACKET    { Ast.Text "[" }
+  | RBRACKET    { Ast.Text "]" }
   | CITE LBRACE t = TEXT RBRACE { Ast.Cite t }
+  | BEGIN LBRACE t = TEXT RBRACE
+    name = option(delimited(LBRACKET, TEXT, RBRACKET))
+    body = list(expr) END LBRACE TEXT RBRACE
+      { Ast.Environment (t, name, body) }
