@@ -11,13 +11,18 @@ let () =
     "geq", ">=";
     "neq", "!=";
     "iff", "<==>";
-    "sym", "tilde";
+    "sim", "tilde";
     "subseteq", "subset.eq";
     "mathcal", "cal";
     "mathbb", "bb";
+    "mathfrak", "frak";
+    "mathbf", "bold";
     "cdot", "dot";
     "cap", "inter";
     "cup", "union";
+    "left", "";
+    "right", "";
+    "middle", "mid";
   ]
 
 let custom : (string, string) Hashtbl.t = Hashtbl.create 16

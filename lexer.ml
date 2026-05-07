@@ -13,8 +13,8 @@ let token lexbuf =
 
   | "\\end" -> END
 
-  | '\\', Plus (Compl ('{' | '}' | '\\' | ' ' | '\t' | '\n' | '\r' | '_' | '^' | ',' | ';' | '.'
-                      | '$' | '[' | ']')) ->
+  | '\\', Plus (Compl ('{' | '}' | '[' | ']' | '(' | ')' | '\\' | ' ' | '\t' | '\n' | '\r'
+                      | '_' | '^' | ',' | ';' | '.' | '$' | '|')) ->
     COMMAND (Sedlexing.Utf8.sub_lexeme lexbuf 1 (Sedlexing.lexeme_length lexbuf - 1))
 
   | '{'          -> LBRACE
@@ -24,6 +24,8 @@ let token lexbuf =
   | ']'          -> RBRACKET
 
   | "$$"          -> DOLLARS
+
+  | "\\\\"        -> NEWLINE
 
   | Plus (Compl ('{' | '}' | '[' | ']' | '\\' | '$')) ->
     TEXT (Sedlexing.Utf8.lexeme lexbuf)

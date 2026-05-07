@@ -4,7 +4,7 @@
 
 %token <string> TEXT
 %token <string> COMMAND
-%token LBRACE RBRACE LBRACKET RBRACKET
+%token LBRACE RBRACE LBRACKET RBRACKET NEWLINE
 %token DOLLARS
 %token BEGIN END
 %token CITE
@@ -25,6 +25,7 @@ expr:
   | RBRACE      { Ast.RBrace }
   | LBRACKET    { Ast.Text "[" }
   | RBRACKET    { Ast.Text "]" }
+  | NEWLINE     { Ast.Text "\\" }
   | CITE LBRACE t = TEXT RBRACE { Ast.Cite t }
   | BEGIN LBRACE t = TEXT RBRACE
     name = option(delimited(LBRACKET, TEXT, RBRACKET))

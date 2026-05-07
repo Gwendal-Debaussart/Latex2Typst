@@ -31,7 +31,7 @@ let rec emit_expr buf e =
     List.iter (emit_expr buf) body;
     Buffer.add_string buf "$"
     | Environment (env, None, body) ->
-    let env_typst = Printf.sprintf "#%s(None,[" env in
+    let env_typst = Printf.sprintf "#%s(none,[" env in
     Buffer.add_string buf env_typst;
     List.iter (emit_expr buf) body;
     Buffer.add_string buf "])"
