@@ -1,0 +1,8 @@
+(executable
+ (name typst2latex)
+ (libraries sedlex menhirLib)
+ (preprocess
+  (pps sedlex.ppx)))
+
+(menhir
+ (modules parser))
