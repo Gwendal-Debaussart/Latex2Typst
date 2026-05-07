@@ -52,7 +52,7 @@ jobs:
         uses: actions/download-artifact@v4
 
       - name: Create release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: |
             typst2latex-linux-x86_64/typst2latex-linux-x86_64
