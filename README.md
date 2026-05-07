@@ -35,5 +35,25 @@ By default, the program looks for a file named `custom_latex_commands.txt` in th
 ./typst2latex input_file [-c custom_commands.txt]
 ```
 
+## Example
+Given the following LaTeX input in `input.tex`:
+
+```latex
+$$
+\forall x \in \Omega, k(\cdot, x) \in \mathcal{S}(\mu) \cap \mathcal{S}(\pi)
+$$
+```
+Running the command:
+
+```bash
+./typst2latex input.tex
+```
+will produce the following Typst output:
+```typst
+$
+forall x in Omega, k(dot, x) in cal(S)(mu) inter cal(S)(pi)
+$
+```
+
 ## License
 This project is licensed under the GNU General Public License v3.0. See the [LICENSE](LICENSE) file for details.
