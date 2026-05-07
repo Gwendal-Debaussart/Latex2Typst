@@ -18,7 +18,7 @@ jobs:
             artifact: typst2latex-macos-arm64
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Setup OCaml
         uses: ocaml/setup-ocaml@v3
