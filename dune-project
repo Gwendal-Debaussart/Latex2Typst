@@ -2,4 +2,4 @@
 
 (using menhir 2.1)
 
-(name typst2latex)
+(name latex2typst)

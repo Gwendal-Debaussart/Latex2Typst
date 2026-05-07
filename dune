@@ -1,5 +1,5 @@
 (executable
- (name typst2latex)
+ (name latex2typst)
  (libraries sedlex menhirLib)
  (preprocess
   (pps sedlex.ppx)))

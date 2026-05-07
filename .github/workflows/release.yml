@@ -13,9 +13,9 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            artifact: typst2latex-linux-x86_64
+            artifact: latex2typst-linux-x86_64
           - os: macos-latest
-            artifact: typst2latex-macos-arm64
+            artifact: latex2typst-macos-arm64
 
     steps:
       - uses: actions/checkout@v6
@@ -32,7 +32,7 @@ jobs:
         run: opam exec -- dune build
 
       - name: Rename binary
-        run: cp _build/default/typst2latex.exe ${{ matrix.artifact }}
+        run: cp _build/default/latex2typst.exe ${{ matrix.artifact }}
 
       - name: Upload artifact
         uses: actions/upload-artifact@v7
@@ -55,6 +55,6 @@ jobs:
         uses: softprops/action-gh-release@v3
         with:
           files: |
-            typst2latex-linux-x86_64/typst2latex-linux-x86_64
-            typst2latex-macos-arm64/typst2latex-macos-arm64
+            latex2typst-linux-x86_64/latex2typst-linux-x86_64
+            latex2typst-macos-arm64/latex2typst-macos-arm64
           generate_release_notes: true
