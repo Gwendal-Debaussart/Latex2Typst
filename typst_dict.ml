@@ -25,6 +25,7 @@ let () =
     "middle", "mid";
     "land", "and";
     "implies", "=>";
+    "circ", "compose";
   ]
 
 let custom : (string, string) Hashtbl.t = Hashtbl.create 16
