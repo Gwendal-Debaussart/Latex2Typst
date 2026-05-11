@@ -5,27 +5,50 @@ let () =
   [
     "int", "integral";
     "to", "->";
+    "gets", "<-";
     "infty", "oo";
     "mapsto", "|->";
     "leq", "<=";
     "geq", ">=";
     "neq", "!=";
     "iff", "<==>";
+    "implies", "=>";
+    "impliedby", "<=";
     "sim", "tilde";
+    "propto", "prop";
     "subseteq", "subset.eq";
     "mathcal", "cal";
     "mathbb", "bb";
     "mathfrak", "frak";
     "mathbf", "bold";
     "cdot", "dot";
+    "ldots", "...";
+    "cdots", "dots.h.c";
+    "vdots", "dots.v";
+    "ddots", "dots.down";
+    "iddots", "dots.up";
     "cap", "inter";
     "cup", "union";
-    "left", "";
-    "right", "";
+    "notin", "in.not";
+    "ni", "in.rev";
+    "lVert", "||";
+    "rVert", "||";
+    "ll", "<<";
+    "gg", ">>";
     "middle", "mid";
     "land", "and";
-    "implies", "=>";
     "circ", "compose";
+    "hfill", "#h(1fr)";
+    "vfill", "#v(1fr)";
+    "blacksquare", "qed";
+    "N", "NN";
+    "Z", "ZZ";
+    "R", "RR";
+    "C", "CC";
+    "Q", "QQ";
+    "left", "";
+    "right", "";
+    "Big", "";
   ]
 
 let custom : (string, string) Hashtbl.t = Hashtbl.create 16
@@ -44,7 +67,7 @@ let load_custom path =
     done
   with End_of_file -> ());
   close_in ic
- 
+
 let default_custom_file = "custom_latex_commands.txt"
 
 let lookup cmd =
