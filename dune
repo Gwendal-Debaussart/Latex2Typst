@@ -5,4 +5,5 @@
   (pps sedlex.ppx)))
 
 (menhir
- (modules parser))
+ (modules parser)
+ (flags --explain --inspection --table --dump))
