@@ -23,7 +23,7 @@ jobs:
       - name: Setup OCaml
         uses: ocaml/setup-ocaml@v3
         with:
-          ocaml-compiler: 4.14
+          ocaml-compiler: 5.4
 
       - name: Install dependencies
         run: opam install -y dune menhir sedlex
