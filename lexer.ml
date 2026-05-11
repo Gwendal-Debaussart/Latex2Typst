@@ -27,7 +27,12 @@ let token_impl lexbuf =
 
   | "\n" -> NEWLINE
 
-  | Plus (Compl ('{' | '}' | '[' | ']' | '\\' | '$' | '\n')) ->
+  | "_" -> UNDERSCORE
+  | "^" -> CARET
+
+  | "\\\\" -> TEXT "\\"
+
+  | Plus (Compl ('{' | '}' | '[' | ']' | '\\' | '$' | '\n' | '_' | '^')) ->
     TEXT (Sedlexing.Utf8.lexeme lexbuf)
 
   | eof -> EOF
@@ -47,6 +52,8 @@ let print_token tok =
   | RBRACKET -> "RBRACKET"
   | DOLLARS -> "DOLLARS"
   | NEWLINE -> "NEWLINE"
+  | UNDERSCORE -> "UNDERSCORE"
+  | CARET -> "CARET"
   | BEGIN -> "BEGIN"
   | END -> "END"
   | EOF -> "EOF"

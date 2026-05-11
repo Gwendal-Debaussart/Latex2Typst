@@ -1,58 +1,61 @@
-let builtin : (string, string) Hashtbl.t = Hashtbl.create 64
+let typst_equiv ?(n_args : int = 0) name =
+  (name, n_args)
+
+let builtin : (string, string * int) Hashtbl.t = Hashtbl.create 64
 
 let () =
   List.iter (fun (k, v) -> Hashtbl.add builtin k v)
   [
-    "int", "integral";
-    "to", "->";
-    "gets", "<-";
-    "infty", "oo";
-    "mapsto", "|->";
-    "leq", "<=";
-    "geq", ">=";
-    "neq", "!=";
-    "iff", "<==>";
-    "implies", "=>";
-    "impliedby", "<=";
-    "sim", "tilde";
-    "propto", "prop";
-    "subseteq", "subset.eq";
-    "mathcal", "cal";
-    "mathbb", "bb";
-    "mathfrak", "frak";
-    "mathbf", "bold";
-    "cdot", "dot";
-    "ldots", "...";
-    "cdots", "dots.h.c";
-    "vdots", "dots.v";
-    "ddots", "dots.down";
-    "iddots", "dots.up";
-    "cap", "inter";
-    "cup", "union";
-    "notin", "in.not";
-    "ni", "in.rev";
-    "lVert", "||";
-    "rVert", "||";
-    "ll", "<<";
-    "gg", ">>";
-    "middle", "mid";
-    "land", "and";
-    "lor", "or";
-    "circ", "compose";
-    "hfill", "#h(1fr)";
-    "vfill", "#v(1fr)";
-    "blacksquare", "qed";
-    "N", "NN";
-    "Z", "ZZ";
-    "R", "RR";
-    "C", "CC";
-    "Q", "QQ";
-    "left", "";
-    "right", "";
-    "Big", "";
+    "int", typst_equiv "integral";
+    "to", typst_equiv "->";
+    "gets", typst_equiv "<-";
+    "infty", typst_equiv "oo";
+    "mapsto", typst_equiv "|->";
+    "leq", typst_equiv "<=";
+    "geq", typst_equiv ">=";
+    "neq", typst_equiv "!=";
+    "iff", typst_equiv "<==>";
+    "implies", typst_equiv "=>";
+    "impliedby", typst_equiv "<=";
+    "sim", typst_equiv "tilde";
+    "propto", typst_equiv"prop";
+    "subseteq", typst_equiv "subset.eq";
+    "mathcal", typst_equiv "cal" ~n_args:1;
+    "mathbb", typst_equiv "bb" ~n_args:1;
+    "mathfrak", typst_equiv "frak" ~n_args:1;
+    "mathbf", typst_equiv "bold" ~n_args:1;
+    "cdot", typst_equiv "dot";
+    "ldots", typst_equiv "...";
+    "cdots", typst_equiv "dots.h.c";
+    "vdots", typst_equiv "dots.v";
+    "ddots", typst_equiv "dots.down";
+    "iddots", typst_equiv "dots.up";
+    "cap", typst_equiv "inter";
+    "cup", typst_equiv "union";
+    "notin", typst_equiv "in.not";
+    "ni", typst_equiv"in.rev";
+    "lVert", typst_equiv "||";
+    "rVert", typst_equiv "||";
+    "ll", typst_equiv "<<";
+    "gg", typst_equiv ">>";
+    "middle", typst_equiv "mid";
+    "land", typst_equiv "and";
+    "lor", typst_equiv"or";
+    "circ", typst_equiv "compose";
+    "hfill", typst_equiv "#h(1fr)";
+    "vfill", typst_equiv "#v(1fr)";
+    "blacksquare", typst_equiv "qed";
+    "N", typst_equiv"NN";
+    "Z", typst_equiv "ZZ";
+    "R", typst_equiv "RR";
+    "C", typst_equiv "CC";
+    "Q", typst_equiv "QQ";
+    "left", typst_equiv "";
+    "right", typst_equiv "";
+    "Big", typst_equiv "";
   ]
 
-let custom : (string, string) Hashtbl.t = Hashtbl.create 16
+let custom : (string, string * int option) Hashtbl.t = Hashtbl.create 16
 
 let load_custom path =
   let ic = open_in path in
@@ -62,7 +65,13 @@ let load_custom path =
       if line <> "" && line.[0] <> '#' then
         match String.split_on_char ' ' line
               |> List.filter (fun s -> s <> "") with
-        | latex :: typst :: _ -> Hashtbl.replace custom latex typst
+        | latex :: typst :: rest ->
+          let n_args = 
+            match rest with
+            | n_str :: _ -> (try Some (int_of_string n_str) with _ -> None)
+            | [] -> None
+          in
+          Hashtbl.replace custom latex (typst, n_args)
         | _ ->
           Printf.eprintf "Warning: ignoring malformed line in custom file: %s\n" line
     done
@@ -74,5 +83,8 @@ let default_custom_file = "custom_latex_commands.txt"
 let lookup cmd =
   match Hashtbl.find_opt custom cmd with
   | Some _ as r -> r
-  | None        -> Hashtbl.find_opt builtin cmd
+  | None ->
+    match Hashtbl.find_opt builtin cmd with
+    | Some (s, n_args) -> Some (s, Some n_args)
+    | None -> None
 

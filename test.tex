@@ -1,0 +1,24 @@
+\begin{proof}
+  First, as $\Omega$ is a subset of a metric space (Euclidean space) and is compact, it is also complete for the induced metric. In addition, as it is connected, it is also path-connected. These properties combined with the fact that $\Omega$ is smooth ensure that $\Omega$ is a smooth complete manifold. Finally, as $(T_t)_{0 \leq t}$ is a locally Lipschitz family of diffeomorphisms representing the trajectories associated with the vector field $\phi_t$, and as $\mu_t = T_{t\#}\mu$, then, a direct application of \cite{Villani2003}[Theorem 5.34] gives that $\mu_t$ is the unique solution of the nonlinear transport equation
+  $$
+  \begin{cases}
+    \frac{\diff \mu_t}{\diff t} + \nabla \cdot (\mu_t \phi_t) &= 0, \forall t > 0, \\
+    \mu_0 &= \mu
+  \end{cases},
+  $$
+  where the divergence operator ($\nabla \cdot$) is defined by duality against smooth compactly supported functions, \ie
+  $$
+  \forall \mu \in \cal{M}(\Omega), \forall \phi : \Omega \to \Omega, \forall \varphi \in C^\infty_c(\Omega), \ket{T_{\nabla \cdot (\phi \mu)}, \varphi} = - \ket{T_\mu, \phi \cdot \nabla \varphi},
+  $$
+  where $\cal{M}(\Omega)$ is the set of measures on $\Omega$, for any $\mu$ in $\cal{M}(\Omega)$, $T_\mu$ is the distribution associated with $\mu$, and, for any $\varphi$ in $C^\infty_c(\Omega)$, $\ket{T_\mu, \varphi} = \int_\Omega \varphi \; \dif \mu$ (see also \cite{Villani2009}).
+%
+  Furthermore, as $\mu_{i+1} = (I_d + \eps \phi_{\mu_i}^\star)_\# \mu_i$ (see \cref{eq:iterative-svgd}), one can write
+  \begin{align*}
+    \int_\Omega \varphi \/ \dif \mu_{i+1} = &\int_\Omega \varphi \circ (I_d + \eps \phi_{\mu_i}^\star) \dif \mu_i, \forall \varphi \in C^\infty_c(\Omega). \\
+    \underset{\eps \to 0}{\sim} &\int_\Omega \varphi + \eps (\nabla \varphi \cdot \phi_{\mu_i}^\star) \dif \mu_i \left( \text{Taylor expansion of } \varphi(x) \text{ at } x + \eps \phi_{\mu_i}^\star(x) \right) \\
+    = &\int_\Omega \varphi \: \dif \mu_i + \int_\Omega \eps \left( \nabla \varphi \cdot \phi_{\mu_i}^\star \right) \dif \mu_i \\
+    = &\int_\Omega \varphi \: \dif \mu_i - \int_\Omega \eps \varphi \: \dif \left( \nabla \cdot (\mu_i \phi_{\mu_i}^\star) \right) \\
+    \iff \int_\Omega \varphi \: \dif \mu_{i+1} &- \int_\Omega \varphi \: \dif \mu_i = - \eps \int_\Omega \varphi \: \dif \left( \nabla \cdot (\mu_i \phi_{\mu_i}^\star) \right). \\
+  \end{align*}
+  This shows that iteratively updates $\mu$ in the direction $I_d + \eps \phi_{\mu_i}^\star$, given a small $\eps$, corresponds to a finite difference approximation of the nonlinear transport equation.
+\end{proof}

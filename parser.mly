@@ -7,6 +7,7 @@
 %token LBRACE RBRACE LBRACKET RBRACKET
 %token DOLLARS NEWLINE
 %token BEGIN END
+%token UNDERSCORE CARET
 %token EOF
 
 %start <Ast.expr list> prog
@@ -17,17 +18,29 @@ prog:
   | exprs = list(expr); EOF { exprs }
 
 brace_arg:
-  | e = delimited(LBRACE, list(expr), RBRACE) { e }
+  | e = delimited(LBRACE, nonempty_list(expr_no_br), RBRACE) { e }
 
 arg:
-  | e = brace_arg { e }
-  | e = delimited(LBRACKET, list(expr), RBRACKET) { e }
+  | arg = brace_arg { arg }
+  | e = delimited(LBRACKET, nonempty_list(expr_no_br), RBRACKET) { e }
 
-expr:
+env:
+  | BEGIN LBRACE name=TEXT RBRACE args=list(arg)
+    el=nonempty_list(expr)
+    END LBRACE TEXT RBRACE { Ast.Env (name, args, el) }
+
+expr_no_br:
   | t = TEXT { Ast.Text t }
-  | LBRACKET { Ast.Text "[" }
-  | RBRACKET { Ast.Text "]" }
   | DOLLARS { Ast.Text "$" }
   | NEWLINE { Ast.Text "\n" }
-  | name = FUNC args = list(brace_arg) { Ast.Func (name, args) }
-  | BEGIN LBRACE name=TEXT RBRACE args=list(arg) NEWLINE el=list(expr) END LBRACE TEXT RBRACE { Ast.Env (name, args, el) }
+  | UNDERSCORE arg = option(delimited(LBRACE, list(expr), RBRACE))
+    { Ast.Subscript (Option.value arg ~default:[]) }
+  | CARET arg = option(delimited(LBRACE, list(expr), RBRACE))
+    { Ast.Superscript (Option.value arg ~default:[]) }
+  | name = FUNC args = list(arg) { Ast.Func (name, args) }
+  | env=env { env }
+
+expr:
+  | e=expr_no_br { e }
+  | LBRACKET { Ast.Text "[" }
+  | RBRACKET { Ast.Text "]" }
