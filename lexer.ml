@@ -2,32 +2,32 @@
 
 open Parser
 
-let token lexbuf =
+let token_impl lexbuf =
   match%sedlex lexbuf with
-  
-  | "\\cite" | "\\citet" | "\\citep" -> CITE
-
-  | "\\ref" | "\\cref" | "\\Cref" | "\\eqref" -> CITE
 
   | "\\begin" -> BEGIN
 
   | "\\end" -> END
 
-  | '\\', Plus (Compl ('{' | '}' | '[' | ']' | '(' | ')' | '\\' | ' ' | '\t' | '\n' | '\r'
-                      | '_' | '^' | ',' | ';' | '.' | '$' | '|')) ->
-    COMMAND (Sedlexing.Utf8.sub_lexeme lexbuf 1 (Sedlexing.lexeme_length lexbuf - 1))
+  | '\\', Plus (Compl ('{' | '}' | '[' | ']' | '(' | ')' | '\\' | ' ' | '_' | '^'
+    | ',' | ';' | '.' | '$' | '|' | '\n')) ->
+    let cmd = Sedlexing.Utf8.sub_lexeme lexbuf 1 (Sedlexing.lexeme_length lexbuf - 1) in
+    FUNC cmd
 
-  | '{'          -> LBRACE
-  | '}'          -> RBRACE
+  | '{' -> LBRACE
+  | '}' -> RBRACE
 
-  | '['          -> LBRACKET
-  | ']'          -> RBRACKET
+  | '[' -> LBRACKET
+  | ']' -> RBRACKET
 
-  | "$$"          -> DOLLARS
+  | "\\{" -> TEXT "{"
+  | "\\}" -> TEXT "}"
 
-  | "\\\\"        -> NEWLINE
+  | "$$" -> DOLLARS
 
-  | Plus (Compl ('{' | '}' | '[' | ']' | '\\' | '$')) ->
+  | "\n" -> NEWLINE
+
+  | Plus (Compl ('{' | '}' | '[' | ']' | '\\' | '$' | '\n')) ->
     TEXT (Sedlexing.Utf8.lexeme lexbuf)
 
   | eof -> EOF
@@ -37,3 +37,23 @@ let token lexbuf =
 
   | _ ->
     TEXT (Sedlexing.Utf8.lexeme lexbuf)
+
+let print_token tok =
+  match tok with
+  | FUNC s -> Printf.sprintf "FUNC(%s)" s
+  | LBRACE -> "LBRACE"
+  | RBRACE -> "RBRACE"
+  | LBRACKET -> "LBRACKET"
+  | RBRACKET -> "RBRACKET"
+  | DOLLARS -> "DOLLARS"
+  | NEWLINE -> "NEWLINE"
+  | BEGIN -> "BEGIN"
+  | END -> "END"
+  | EOF -> "EOF"
+  | TEXT s -> Printf.sprintf "TEXT(%s)" s
+
+let token debug lexbuf =
+  let tok = token_impl lexbuf in
+  if debug then
+    Printf.printf "Lexed token: %s\n" (print_token tok);
+  tok

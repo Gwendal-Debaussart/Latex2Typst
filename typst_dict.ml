@@ -37,6 +37,7 @@ let () =
     "gg", ">>";
     "middle", "mid";
     "land", "and";
+    "lor", "or";
     "circ", "compose";
     "hfill", "#h(1fr)";
     "vfill", "#v(1fr)";

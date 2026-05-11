@@ -6,16 +6,21 @@ Usage: typst2latex [OPTIONS] <file.tex>
 Options:
   -c <path>   Use a custom command mapping file (default: "custom_commands")
   -h          Show this help message
+  -d          Enable debug output
 |}
 
 let () =
   let custom_file = ref None in
   let input_file  = ref None in
+  let debug       = ref false in
 
   let rec parse = function
     | [] -> ()
     | "-h" :: _ ->
       print_string usage; exit 0
+    | "-d" :: rest ->
+      debug := true;
+      parse rest
     | "-c" :: path :: rest ->
       custom_file := Some path;
       parse rest
@@ -60,7 +65,7 @@ let () =
   in
 
   let lexbuf   = Sedlexing.Utf8.from_string input in
-  let provider = Sedlexing.with_tokenizer Lexer.token lexbuf in
+  let provider = Sedlexing.with_tokenizer (Lexer.token !debug) lexbuf in
   let ast =
     try MenhirLib.Convert.Simplified.traditional2revised Parser.prog provider
     with Parser.Error ->
@@ -70,4 +75,4 @@ let () =
         (pos.Lexing.pos_cnum - pos.Lexing.pos_bol);
       exit 1
   in
-  print_string (Printer.emit ast ^ "\n")
+  print_string (Printer.emit !debug ast ^ "\n")
