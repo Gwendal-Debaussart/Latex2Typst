@@ -40,7 +40,11 @@ Let $f: [a, b] \to \mathbb{R}$ be a \textbf{continuous} function, and define:
 \begin{equation}\label{eq:ftc_integral}
   F(x) = \int_a^x f(t) \dif t \text{The Riemann integral of } $f$ \text{ from } $a$ \text{ to } $x$
 \end{equation}
-Then $F'(x) = f(x)$ for all $x \in (a, b)$.
+Then the derivative of $F$ is given by:
+$$
+F'(x) = \lim_{h \to 0} \frac{F(x+h) - F(x)}{h} = f(x)
+$$
+for all $x \in (a, b)$.
 \end{theorem}
 ```
 Running the command:
@@ -55,7 +59,11 @@ Let $f: [a, b] -> RR$ be a *continuous* function, and define:
 $<eq:ftc_integral>
   F(x) = integral_a^x f(t) dif t "The Riemann integral of " $f$ " from " $a$ " to " $x$
 $
-Then $F'(x) = f(x)$ for all $x in (a, b)$.
+Then the derivative of $F$ is given by:
+$
+F'(x) = lim_(h -> 0) (F(x+h) - F(x)) / (h) = f(x)
+$
+for all $x in (a, b)$.
 ])
 ```
 
